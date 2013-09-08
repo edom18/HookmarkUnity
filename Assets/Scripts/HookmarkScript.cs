@@ -18,16 +18,45 @@ public class HookmarkScript : MonoBehaviour {
 		
 		targetScript = GameObject.Find ("LeapController").GetComponent<LeapUnityBridge>();
 		
-		LeapUnityHandController script = GameObject.Find ("Leap Hands").GetComponent<LeapUnityHandController>();
-		finger = script.m_fingers[0];
+		if (m_Use_mouse) {
+			UseMouseFinger();
+		}
 	}
 	
 	void Update () {
+		if (m_Use_mouse)
+		{
+			UpdateFingerPositionWithMouse();
+		}
+		
 		if (m_Use_mouse && prevLine != null)
         {
             Vector3 pos = finger.transform.position;
 			prevLine.SetPosition(1, pos);
         }
+	}
+	
+	/**
+	 * Use finger and controling from mouse if m_Use_mouse is true.
+	 */
+	void UseMouseFinger()
+	{
+		LeapUnityHandController controller = GameObject.Find ("Leap Hands").GetComponent<LeapUnityHandController>();
+		finger = controller.m_fingers[0];
+		controller.SetVisible(finger, true);
+		controller.SetCollidable(finger, true);
+	}
+	
+	/**
+	 * Update finger position from mouse position.
+	 */
+	void UpdateFingerPositionWithMouse()
+	{
+		Vector3 screen_point = Input.mousePosition;
+		screen_point.z = 7.8f;
+		
+		Vector3 world_position = Camera.main.ScreenToWorldPoint(screen_point);
+		finger.transform.position = world_position;
 	}
 	
 	void OnPointableUpdated(Pointable p)

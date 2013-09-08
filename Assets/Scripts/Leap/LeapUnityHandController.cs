@@ -33,7 +33,7 @@ public class LeapUnityHandController : MonoBehaviour
 	private int[]					m_fingerIDs = null;
 	private int[]					m_handIDs	= null;
 	
-	void SetCollidable( GameObject obj, bool collidable )
+	public void SetCollidable( GameObject obj, bool collidable )
 	{
 		foreach( Collider component in obj.GetComponents<Collider>() )
 			component.enabled = collidable;
@@ -42,7 +42,7 @@ public class LeapUnityHandController : MonoBehaviour
 			child.enabled = collidable;
 	}
 	
-	void SetVisible( GameObject obj, bool visible )
+	public void SetVisible( GameObject obj, bool visible )
 	{
 		foreach( Renderer component in obj.GetComponents<Renderer>() )
 			component.enabled = visible && m_DisplayHands;
@@ -90,21 +90,9 @@ public class LeapUnityHandController : MonoBehaviour
 	
 	void Update()
 	{
-		MoveToMousePosition();
+		//do nothing.
 	}
-	
-	void MoveToMousePosition()
-	{
-		GameObject finger = m_fingers[0];
-		SetVisible(finger, true);
-		SetCollidable(finger, true);
-		Vector3 screen_point = Input.mousePosition;
-		screen_point.z = 7.8f;
-		
-		Vector3 world_position = Camera.main.ScreenToWorldPoint(screen_point);
-		finger.transform.position = world_position;
-	}
-	
+
 	
 	//When an object is found, we find our first inactive game object, activate it, and assign it to the found id
 	//When lost, we deactivate the object & set it's id to -1
